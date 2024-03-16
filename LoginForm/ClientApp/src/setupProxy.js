@@ -6,6 +6,8 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 const context = [
   "/weatherforecast",
+  "/api/User",
+  "api/User"
 ];
 
 const onError = (err, req, resp, target) => {
@@ -16,6 +18,7 @@ module.exports = function (app) {
   const appProxy = createProxyMiddleware(context, {
     proxyTimeout: 10000,
     target: target,
+    changeOrigin: true,
     // Handle errors to prevent the proxy middleware from crashing when
     // the ASP NET Core webserver is unavailable
     onError: onError,

@@ -1,45 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Mvc;
+using LoginForm.Services;
+using LoginForm.Models;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace LoginForm.Controllers
 {
-    [Route("api/[controller]")]
-    public class ValuesController : Controller
+
+    [Route("api/User")]
+    public class UsersController : Controller
     {
-        // GET: api/values
+        private readonly UserServices userServices;
+        public UsersController(UserServices usrServices)
+        {
+            userServices = usrServices;
+        }
+        // GET: api/User
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<List<User>> Get() => await userServices.GetAsync();
+
+
+        // GET api/User/65f58e468c6a06180254d072
+        [HttpGet("{id:length(24)}")]
+        public async Task<ActionResult<User>> Get(string id)
         {
-            return new string[] { "value1", "value2" };
+            User user = await userServices.GetAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return user;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
+        // POST api/User
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<ActionResult<User>> Post(User newUser)
         {
+            await userServices.CreateAsync(newUser);
+            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
         }
 
-        // PUT api/values/5
+        // PUT api/User/65f58e468c6a06180254d072
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public void Put(string id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/User/65f58e468c6a06180254d072
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
         }
     }

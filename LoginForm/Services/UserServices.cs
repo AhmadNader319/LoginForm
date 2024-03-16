@@ -16,25 +16,16 @@ namespace LoginForm.Services
             UserCollection = mongoDb.GetCollection<User>(databaseSettings.Value.CollectionName);
         }
 
-        // get all students
+        // get all users
         public async Task<List<User>> GetAsync() => await UserCollection.Find(_ => true).ToListAsync();
 
 
-        // get student by id
+        // get user by id
         public async Task<User> GetAsync(string id) =>
             await UserCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-        // add new student 
-        public async Task CreateAsync(User newStudent) =>
-            await UserCollection.InsertOneAsync(newStudent);
-
-        // update student
-
-        public async Task UpdateAsync(string id, User updateStudent) =>
-            await UserCollection.ReplaceOneAsync(x => x.Id == id, updateStudent);
-
-        // delete student
-        public async Task RemoveAsync(string id) =>
-            await UserCollection.DeleteOneAsync(x => x.Id == id);
+        // add new user 
+        public async Task CreateAsync(User newUser) =>
+            await UserCollection.InsertOneAsync(newUser);
     }
 }
