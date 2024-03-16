@@ -1,8 +1,15 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using LoginForm.Data;
+using LoginForm.Services;
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.Configure<DatabaseSettings>(
+                builder.Configuration.GetSection("ConnectionStrings"));
+
+builder.Services.AddSingleton<UserServices>();
 
 var app = builder.Build();
 
