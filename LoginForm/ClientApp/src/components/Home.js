@@ -6,14 +6,14 @@ export default function Home ()
 
   const [users, setUsers] = useState( [] );
   const [sid, setSid] = useState( "" );
-  
+
   useEffect( () =>
   {
     fetch( "api/User" ).then( r => r.json() ).then( d =>
     {
-      console.log( "The students are: ", d );
+      console.log( "The users are: ", d );
       setUsers( d );
-    } ).catch( e => console.log( "The error fetching all students: ", e ) );
+    } ).catch( e => console.log( "The error fetching all users: ", e ) );
   }, [] );
 
   return (
@@ -34,8 +34,8 @@ export default function Home ()
           {
             users.length === 0 ? <tr className="row waiting"><td className="row">Loading<span className="loading">...</span></td></tr> :
             users.map( User => <tr key={User.ID}>
-                <td>{User.ID}</td>
                 <td>{User.Name}</td>
+                <td>{User.Password}</td>
               </tr> )
           }
         </tbody>

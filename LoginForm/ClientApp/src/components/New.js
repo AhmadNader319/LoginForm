@@ -1,20 +1,18 @@
-import { useState } from "react";
 import "./styles.css";
+
 const entry = {
-  id: "",
   Name: "",
-  password: ""
+  Password: ""
 };
 
-export default function New (props) {
-  const [newEntry, setNewEntry] = useState(entry);
+export default function New(props) {
 
-  const addNewUser = () => {
-    console.log("The New User Is: ", newEntry);
+    const addNewUser = () => {
 
-    fetch("api/User", {
+        console.log(entry);
+     fetch("api/User", {
       method: "POST",
-      body: JSON.stringify(newEntry),
+      body: JSON.stringify(entry),
       headers: {
         "Content-Type": "application/json"
       }
@@ -32,39 +30,33 @@ export default function New (props) {
       .catch((e) => console.log("Error adding new user: ", e));
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewEntry((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
+    const newData = (e) => {
+        const name = e.target.name;
+        let value = e.target.value;
+        console.log(name + " " + value);
+        entry[name] = value;
+    };
 
-  return (
-    <div>
-      <h1>Login</h1>
-      <div>
-        <label htmlFor="fn">Name</label>
-        <input type="text" name="Name" id="Name" onChange={handleInputChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="t">Password</label>
-        <input
-          type="text"
-          name="text"
-          id="Password"
-          onChange={handleInputChange}
-        />
-      </div>
-      <div className="mt-30 row p20 justify-btw">
-        <div className="btn cancel" onClick={() => (window.location = "/")}>
-          Cancel
+    return (
+
+
+        <div>
+             <h1>Login</h1>
+
+            <div className="mt-10">
+                <label htmlFor="fn">First Name</label>
+                <input type="text" name="Name" id="Name" onChange={newData} />
+            </div>
+
+            <div className="mt-10">
+                <label htmlFor="ln">Last Name</label>
+                <input type="text" name="Password" id="Password" onChange={newData} />
+            </div>
+            <div className="mt-30 row p20 justify-btw">
+                <div className="btn cancel" onClick={() => (window.location = "/")}>Cancel</div>
+                <div className="btn add" onClick={addNewUser}>Login</div>
+            </div>
         </div>
-        <div className="btn add" onClick={addNewUser}>
-          Login
-        </div>
-      </div>
-    </div>
-  );
+        
+    );
 }

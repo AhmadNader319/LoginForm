@@ -29,3 +29,4 @@ namespace LoginForm.Services
             await UserCollection.InsertOneAsync(newUser);
     }
 }
+

@@ -10,13 +10,13 @@ namespace LoginForm.Models
 	{
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = "";
+        public string Id { get; set; } = string.Empty;
 
         [BsonElement("Name")]
-        public string FirstName { get; set; } = "Student Name";
+        public string Name { get; set; } = "Namon";
 
         [BsonElement("Password")]
-        public string LastName { get; set; } = "Student Password";
+        public string Password { get; set; } = "Passwordon";
     }
 }
 

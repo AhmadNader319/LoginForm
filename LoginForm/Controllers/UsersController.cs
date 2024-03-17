@@ -1,6 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LoginForm.Services;
 using LoginForm.Models;
+using Newtonsoft.Json;
+using MongoDB.Bson;
+using Amazon.Runtime.Internal;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace LoginForm.Controllers
@@ -10,6 +17,7 @@ namespace LoginForm.Controllers
     public class UsersController : Controller
     {
         private readonly UserServices userServices;
+
         public UsersController(UserServices usrServices)
         {
             userServices = usrServices;
@@ -33,11 +41,30 @@ namespace LoginForm.Controllers
 
         // POST api/User
         [HttpPost]
-        public async Task<ActionResult<User>> Post(User newUser)
+        public async Task<ActionResult<User>> Post()
         {
-            await userServices.CreateAsync(newUser);
-            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+            // Read the request body stream
+            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                string requestBody = await reader.ReadToEndAsync();
+
+                // Manually deserialize JSON into User object
+                User newUser = JsonConvert.DeserializeObject<User>(requestBody);
+
+                // Check if deserialization was successful
+                if (newUser == null)
+                {
+                    return BadRequest(); // If deserialization fails, return BadRequest
+                }
+
+                // Process the User object (e.g., save to database)
+                await userServices.CreateAsync(newUser);
+
+                // Return a success response
+                return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+            }
         }
+
 
         // PUT api/User/65f58e468c6a06180254d072
         [HttpPut("{id}")]
